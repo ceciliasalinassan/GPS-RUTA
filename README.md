@@ -22,3 +22,5 @@ Se agregó carga masiva de facturas por cobrar y vínculo de egreso con factura/
 Recordatorio separado de Enviar factura. Deudas pendientes por defecto. Pie con números visibles.
 
 Informe corregido: Facturas por cobrar exporta solo vencidas y por vencer.
+
+Clientes simplificado: listado muestra solo nombre/razón social y RUT.

@@ -202,3 +202,19 @@
 .invoiceSend{width:auto!important;min-width:44px;padding:0 8px;color:#FFD43B!important;border-color:rgba(255,212,59,.45)!important;font-size:11px;font-weight:900}
 .invoiceSend.disabled{opacity:.45;cursor:not-allowed;filter:grayscale(.4)}
 .recharts-pie-label-text{fill:#fff!important;font-weight:900;font-size:13px}
+
+
+/* CLIENTES SIMPLE: solo Nombre y RUT */
+.client h3{
+  font-size:18px;
+  margin:0 0 8px;
+}
+.client .rutOnly{
+  color:#FFD43B;
+  font-weight:800;
+  margin:0 0 12px;
+}
+.clientIcon{
+  width:54px!important;
+  height:54px!important;
+}
