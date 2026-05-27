@@ -343,3 +343,72 @@ th{
 .recharts-pie-sector{
   filter:drop-shadow(0 0 8px rgba(255,212,59,.18));
 }
+
+
+/* CORRECCIÓN FINAL: NÚMEROS FIJOS VISIBLES EN ESTADO FACTURAS */
+.estadoFacturasCard .chart,
+.estadoFacturasCard .chart.donut{
+  height:165px!important;
+  margin-bottom:8px;
+}
+
+.estadoFacturasNumeros{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:8px;
+  margin-top:8px;
+}
+
+.estadoItem{
+  display:grid;
+  grid-template-columns:14px 1fr auto;
+  align-items:center;
+  gap:9px;
+  padding:8px 10px;
+  border-radius:12px;
+  background:rgba(255,255,255,.055);
+  border:1px solid rgba(255,255,255,.08);
+}
+
+.estadoItem span{
+  width:12px;
+  height:12px;
+  border-radius:50%;
+  display:block;
+}
+
+.estadoItem b{
+  color:#ffffff;
+  font-size:13px;
+}
+
+.estadoItem strong{
+  font-size:18px;
+  color:#FFD43B;
+}
+
+.estado0 span{background:#7CFC00}
+.estado1 span{background:#FFD43B}
+.estado2 span{background:#ff9500}
+.estado3 span{background:#ff3131}
+
+.estado0 strong{color:#7CFC00}
+.estado1 strong{color:#FFD43B}
+.estado2 strong{color:#ff9500}
+.estado3 strong{color:#ff5757}
+
+
+/* NUEVO MODELO GRÁFICO FINANCIERO */
+.chart.compact,
+.chart{
+  border-radius:18px;
+}
+.recharts-legend-item-text{
+  color:#d8d8d8!important;
+}
+.recharts-line-curve{
+  filter:drop-shadow(0 0 8px rgba(0,163,255,.45));
+}
+.recharts-bar-rectangle path{
+  filter:drop-shadow(0 0 6px rgba(255,212,59,.10));
+}
