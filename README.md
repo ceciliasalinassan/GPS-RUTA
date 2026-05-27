@@ -38,3 +38,7 @@ Informe Excel corregido: hoja Deudas muestra solo pendientes/no pagadas.
 Se agregó envío de correo para deudas/facturas por pagar con email del proveedor.
 
 Correo de cobranza actualizado a gpsruta007@outlook.com.
+
+Dashboard ajustado: números del resumen más pequeños y estilo futurista reforzado.
+
+Dashboard mejorado con estilo futurista animado, holográfico y efectos neón.

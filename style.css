@@ -632,3 +632,325 @@ th{
   color:#00a3ff!important;
   border-color:rgba(0,163,255,.35)!important;
 }
+
+
+/* === AJUSTE DASHBOARD FUTURISTA: RESUMEN DEL MES === */
+.summaryHolo,
+.dashboard3d .summaryHolo{
+  background:
+    linear-gradient(145deg,rgba(0,255,210,.075),rgba(0,0,0,.74) 52%,rgba(255,212,59,.05))!important;
+  border-color:rgba(0,255,210,.38)!important;
+  box-shadow:
+    0 26px 74px rgba(0,0,0,.62),
+    0 0 34px rgba(0,255,210,.13),
+    inset 0 0 34px rgba(124,252,0,.045)!important;
+}
+
+.summaryGrid{
+  grid-template-columns:repeat(3,1fr)!important;
+  gap:10px!important;
+}
+
+.summaryGrid div{
+  min-height:76px!important;
+  padding:10px 12px!important;
+  border-radius:16px!important;
+  background:
+    radial-gradient(circle at 88% 18%,rgba(0,255,210,.16),transparent 34%),
+    linear-gradient(145deg,rgba(0,255,210,.075),rgba(255,212,59,.035))!important;
+  border:1px solid rgba(0,255,210,.22)!important;
+  position:relative;
+  overflow:hidden;
+}
+
+.summaryGrid div:after{
+  content:"";
+  position:absolute;
+  left:10px;
+  right:10px;
+  bottom:6px;
+  height:1px;
+  background:linear-gradient(90deg,transparent,rgba(124,252,0,.55),transparent);
+  opacity:.7;
+}
+
+.summaryGrid b{
+  font-size:15px!important;
+  line-height:1.08!important;
+  color:#00ffd2!important;
+  text-shadow:0 0 10px rgba(0,255,210,.42)!important;
+  word-break:break-word;
+  overflow-wrap:anywhere;
+  display:block;
+  max-width:100%;
+}
+
+.summaryGrid span{
+  font-size:11px!important;
+  line-height:1.2!important;
+  color:#e7faff!important;
+  margin-top:5px;
+  display:block;
+  text-transform:uppercase;
+  letter-spacing:.35px;
+}
+
+.dashboard3d .summaryGrid b{
+  font-size:15px!important;
+}
+
+.dashboard3d .summaryGrid div:hover{
+  transform:translateY(-2px) scale(1.015);
+  border-color:rgba(124,252,0,.42)!important;
+  box-shadow:0 0 22px rgba(0,255,210,.13);
+}
+
+/* Más efecto futurista general en dashboard */
+.dashboard3d{
+  position:relative;
+}
+
+.dashboard3d:before{
+  content:"";
+  position:absolute;
+  inset:-14px;
+  border-radius:26px;
+  background:
+    linear-gradient(90deg,transparent,rgba(0,255,210,.08),transparent),
+    radial-gradient(circle at 50% 0%,rgba(124,252,0,.12),transparent 28%);
+  pointer-events:none;
+  filter:blur(10px);
+  opacity:.78;
+}
+
+.dashboard3d .holoCard{
+  backdrop-filter:blur(16px) saturate(1.25)!important;
+}
+
+.dashboard3d .holoBadge{
+  animation:pulseBadge 2.4s ease-in-out infinite alternate;
+}
+
+@keyframes pulseBadge{
+  from{box-shadow:0 0 8px rgba(0,255,210,.12)}
+  to{box-shadow:0 0 22px rgba(0,255,210,.35)}
+}
+
+@media(max-width:1180px){
+  .summaryGrid{grid-template-columns:repeat(2,1fr)!important}
+}
+@media(max-width:650px){
+  .summaryGrid{grid-template-columns:1fr!important}
+  .summaryGrid b{font-size:14px!important}
+}
+
+
+/* === DASHBOARD FUTURISTA ANIMADO PRO === */
+main{
+  position:relative;
+}
+
+main:before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  background:
+    radial-gradient(circle at 22% 18%,rgba(0,255,210,.14),transparent 24%),
+    radial-gradient(circle at 78% 28%,rgba(124,252,0,.12),transparent 22%),
+    radial-gradient(circle at 58% 88%,rgba(255,212,59,.10),transparent 25%);
+  animation:ambientPulse 7s ease-in-out infinite alternate;
+  z-index:0;
+}
+
+@keyframes ambientPulse{
+  from{opacity:.45;filter:blur(0px)}
+  to{opacity:.9;filter:blur(2px)}
+}
+
+.dashboard3d{
+  position:relative;
+  isolation:isolate;
+}
+
+.dashboard3d:after{
+  content:"";
+  position:absolute;
+  inset:-20px;
+  pointer-events:none;
+  background:
+    linear-gradient(115deg,transparent 0%,rgba(0,255,210,.08) 35%,transparent 58%),
+    repeating-linear-gradient(90deg,rgba(0,255,210,.035) 0 1px,transparent 1px 28px);
+  border-radius:32px;
+  animation:holoSweep 5.5s linear infinite;
+  opacity:.55;
+  z-index:-1;
+}
+
+@keyframes holoSweep{
+  0%{transform:translateX(-4%) skewX(-8deg);opacity:.25}
+  50%{opacity:.75}
+  100%{transform:translateX(4%) skewX(-8deg);opacity:.25}
+}
+
+.dashboard3d .holoCard,
+.dashboard3d .card{
+  animation:cardFloat 5.8s ease-in-out infinite;
+  transform-style:preserve-3d;
+}
+
+.dashboard3d .holoCard:nth-child(2),
+.dashboard3d .card:nth-child(2){
+  animation-delay:.8s;
+}
+.dashboard3d .holoCard:nth-child(3),
+.dashboard3d .card:nth-child(3){
+  animation-delay:1.4s;
+}
+
+@keyframes cardFloat{
+  0%,100%{transform:translateY(0) rotateX(1.5deg) rotateY(-.8deg)}
+  50%{transform:translateY(-5px) rotateX(0deg) rotateY(.8deg)}
+}
+
+.dashboard3d .holoCard:hover,
+.dashboard3d .card:hover{
+  animation-play-state:paused;
+  transform:translateY(-7px) scale(1.012)!important;
+}
+
+.dashboard3d .chart,
+.dashboard3d .chart.compact,
+.dashboard3d .chart.donut{
+  position:relative;
+  overflow:hidden;
+}
+
+.dashboard3d .chart:after,
+.dashboard3d .chart.compact:after,
+.dashboard3d .chart.donut:after{
+  content:"";
+  position:absolute;
+  left:-20%;
+  right:-20%;
+  top:-10%;
+  height:70px;
+  background:linear-gradient(180deg,transparent,rgba(0,255,210,.18),transparent);
+  animation:scannerMove 3.2s ease-in-out infinite;
+  pointer-events:none;
+}
+
+@keyframes scannerMove{
+  0%{transform:translateY(-90px);opacity:.05}
+  45%{opacity:.55}
+  100%{transform:translateY(310px);opacity:.05}
+}
+
+.kpis .card{
+  position:relative;
+  overflow:hidden;
+}
+
+.kpis .card:before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(120deg,transparent,rgba(0,255,210,.10),transparent);
+  transform:translateX(-120%);
+  animation:kpiShine 4.4s ease-in-out infinite;
+  pointer-events:none;
+}
+
+.kpis .card:nth-child(2):before{animation-delay:.4s}
+.kpis .card:nth-child(3):before{animation-delay:.8s}
+.kpis .card:nth-child(4):before{animation-delay:1.2s}
+.kpis .card:nth-child(5):before{animation-delay:1.6s}
+
+@keyframes kpiShine{
+  0%,55%{transform:translateX(-120%)}
+  100%{transform:translateX(120%)}
+}
+
+.kpiIcon{
+  animation:iconGlow 2.8s ease-in-out infinite alternate;
+}
+
+@keyframes iconGlow{
+  from{box-shadow:0 0 10px rgba(0,255,210,.10), inset 0 0 12px rgba(124,252,0,.08)}
+  to{box-shadow:0 0 24px rgba(0,255,210,.32), inset 0 0 18px rgba(124,252,0,.16)}
+}
+
+.summaryGrid div{
+  transition:.28s ease;
+}
+
+.summaryGrid div:hover{
+  transform:translateY(-4px) scale(1.025);
+}
+
+.summaryGrid div:before{
+  animation:orbMove 4.8s ease-in-out infinite alternate;
+}
+
+@keyframes orbMove{
+  from{transform:translate(0,0) scale(1)}
+  to{transform:translate(-14px,14px) scale(1.18)}
+}
+
+.estadoItem{
+  position:relative;
+  overflow:hidden;
+}
+
+.estadoItem:after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.08),transparent);
+  transform:translateX(-120%);
+  animation:estadoGlow 3.7s ease-in-out infinite;
+}
+
+@keyframes estadoGlow{
+  0%,60%{transform:translateX(-120%)}
+  100%{transform:translateX(120%)}
+}
+
+.recharts-wrapper{
+  filter:drop-shadow(0 0 12px rgba(0,255,210,.10));
+}
+
+.recharts-line-dot,
+.recharts-active-dot{
+  filter:drop-shadow(0 0 10px rgba(0,255,210,.85));
+}
+
+.recharts-bar-rectangle{
+  transition:.25s ease;
+}
+
+.holoBadge{
+  position:relative;
+  overflow:hidden;
+}
+
+.holoBadge:after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.24),transparent);
+  transform:translateX(-130%);
+  animation:badgeShine 2.8s ease-in-out infinite;
+}
+
+@keyframes badgeShine{
+  0%,50%{transform:translateX(-130%)}
+  100%{transform:translateX(130%)}
+}
+
+@media(prefers-reduced-motion:reduce){
+  *,*:before,*:after{
+    animation:none!important;
+    transition:none!important;
+  }
+}
