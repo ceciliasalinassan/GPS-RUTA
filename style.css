@@ -218,3 +218,128 @@
   width:54px!important;
   height:54px!important;
 }
+
+
+/* === FONDO PREMIUM NEGRO / DORADO / VERDE NEÓN === */
+body{
+  background:#030303!important;
+}
+
+.app,.loginPage{
+  background:
+    radial-gradient(circle at 18% 18%, rgba(124,252,0,.16), transparent 24%),
+    radial-gradient(circle at 85% 20%, rgba(255,212,59,.14), transparent 26%),
+    radial-gradient(circle at 70% 88%, rgba(124,252,0,.10), transparent 28%),
+    linear-gradient(135deg,#020202 0%,#080806 40%,#020202 100%)!important;
+}
+
+.app:before,.loginPage:before{
+  background-image:
+    linear-gradient(rgba(255,212,59,.10) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(124,252,0,.07) 1px, transparent 1px)!important;
+  background-size:46px 46px!important;
+  opacity:.18!important;
+}
+
+.app:after,.loginPage:after{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  background:
+    linear-gradient(120deg, transparent 0%, rgba(255,212,59,.06) 28%, transparent 48%),
+    radial-gradient(circle at center, transparent 42%, rgba(0,0,0,.42) 100%);
+  animation:premiumGlow 9s ease-in-out infinite alternate;
+}
+
+@keyframes premiumGlow{
+  from{opacity:.55; transform:scale(1)}
+  to{opacity:.9; transform:scale(1.03)}
+}
+
+aside{
+  background:rgba(0,0,0,.82)!important;
+  border-right:1px solid rgba(255,212,59,.32)!important;
+  box-shadow:18px 0 45px rgba(0,0,0,.45);
+}
+
+.card,.loginCard{
+  background:linear-gradient(145deg,rgba(10,10,8,.78),rgba(0,0,0,.68))!important;
+  border:1px solid rgba(255,212,59,.26)!important;
+  box-shadow:
+    0 18px 42px rgba(0,0,0,.38),
+    inset 0 0 0 1px rgba(124,252,0,.045)!important;
+}
+
+.card:hover{
+  border-color:rgba(124,252,0,.34)!important;
+  box-shadow:
+    0 22px 52px rgba(0,0,0,.46),
+    0 0 24px rgba(124,252,0,.08),
+    inset 0 0 0 1px rgba(255,212,59,.06)!important;
+}
+
+.card h2{
+  color:#FFD43B!important;
+}
+
+.logo b,.logo p,.autosave,.chips .green{
+  color:#7CFC00!important;
+}
+
+.pin{
+  background:radial-gradient(circle,#fff 0%,#FFD43B 45%,#7CFC00 100%)!important;
+  box-shadow:
+    0 0 22px rgba(255,212,59,.36),
+    0 0 36px rgba(124,252,0,.25)!important;
+}
+
+nav button.active,nav button:hover{
+  background:linear-gradient(90deg,rgba(255,212,59,.22),rgba(124,252,0,.08))!important;
+  box-shadow:inset 4px 0 #FFD43B!important;
+}
+
+.search,.chips span,.monthSelect,input,select,.admin,.autosave{
+  border-color:rgba(255,212,59,.28)!important;
+  background:rgba(0,0,0,.62)!important;
+}
+
+.kpiIcon{
+  box-shadow:
+    0 0 18px rgba(255,212,59,.16),
+    inset 0 0 12px rgba(124,252,0,.08)!important;
+}
+
+.primary{
+  background:linear-gradient(135deg,#7CFC00,#DFFF65)!important;
+  box-shadow:0 0 22px rgba(124,252,0,.22)!important;
+}
+
+.primary.gold,.backupBtn.reportBtn{
+  background:linear-gradient(135deg,#FFD43B,#b88900)!important;
+  color:#111!important;
+}
+
+.tableWrap{
+  border-color:rgba(255,212,59,.20)!important;
+}
+
+th{
+  background:rgba(255,212,59,.09)!important;
+  color:#FFD43B!important;
+}
+
+
+/* NÚMEROS VISIBLES EN ESTADO FACTURAS DEL MES */
+.recharts-pie-label-text{
+  fill:#ffffff!important;
+  font-size:12px!important;
+  font-weight:900!important;
+  paint-order:stroke;
+  stroke:#000000;
+  stroke-width:3px;
+  stroke-linejoin:round;
+}
+.recharts-pie-sector{
+  filter:drop-shadow(0 0 8px rgba(255,212,59,.18));
+}

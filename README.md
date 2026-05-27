@@ -24,3 +24,7 @@ Recordatorio separado de Enviar factura. Deudas pendientes por defecto. Pie con 
 Informe corregido: Facturas por cobrar exporta solo vencidas y por vencer.
 
 Clientes simplificado: listado muestra solo nombre/razón social y RUT.
+
+Fondo actualizado a estilo premium negro/dorado/verde neón.
+
+Dashboard corregido: Estado facturas del mes muestra números visibles de inmediato.
