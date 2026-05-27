@@ -9,6 +9,7 @@ import"./style.css";
 const KEY="gpsruta_financiero_pro_v2";
 const SESSION="gpsruta_login";
 const PASS="1234";
+const SENDER_EMAIL="gpsruta007@gmail.com";
 const incomeCats=["Venta de GPS","Instalación de GPS","Servicio mensual","Pago de factura","Abono cliente","Otro ingreso"];
 const expenseCats=["Pago instalador","Pago IVA","Pago contadora","Pago arriendo","Pago combustible","Pago internet","Pago plataforma","Compra de equipos","Otro egreso"];
 const seed={clients:[
@@ -33,9 +34,9 @@ function ist(i){if(i.estado==="Pagada")return{l:"Pagada",c:"ok",I:CheckCircle};l
 function reminderText(i){return `Estimado cliente, se recuerda su Factura ${i.factura} por la suma de ${money(i.monto)}. Saludos Cordiales GpsRuta`}
 function invoiceSendText(i){return `Estimado cliente, se adjunta Factura ${i.factura} por la suma de ${money(i.monto)}. Saludos Cordiales. GpsRuta.`}
 function waReminder(i,c){return `https://wa.me/${c?.telefono||""}?text=${encodeURIComponent(reminderText(i))}`}
-function emailReminder(i,c){let s=`Recordatorio factura ${i.factura}`;return `mailto:${c?.email||""}?subject=${encodeURIComponent(s)}&body=${encodeURIComponent(reminderText(i))}`}
+function emailReminder(i,c){let s=`Recordatorio factura ${i.factura}`;let b=reminderText(i)+`\n\nCorreo cobranza: ${SENDER_EMAIL}`;return `mailto:${c?.email||""}?cc=${encodeURIComponent(SENDER_EMAIL)}&subject=${encodeURIComponent(s)}&body=${encodeURIComponent(b)}`}
 function waInvoice(i,c){return `https://wa.me/${c?.telefono||""}?text=${encodeURIComponent(invoiceSendText(i))}`}
-function emailInvoice(i,c){let s=`Envío factura ${i.factura}`;let b=invoiceSendText(i)+`\n\nNota: adjuntar factura antes de enviar.`;return `mailto:${c?.email||""}?subject=${encodeURIComponent(s)}&body=${encodeURIComponent(b)}`}
+function emailInvoice(i,c){let s=`Envío factura ${i.factura}`;let b=invoiceSendText(i)+`\n\nNota: adjuntar factura antes de enviar.\nCorreo cobranza: ${SENDER_EMAIL}`;return `mailto:${c?.email||""}?cc=${encodeURIComponent(SENDER_EMAIL)}&subject=${encodeURIComponent(s)}&body=${encodeURIComponent(b)}`}
 function wa(i,c){return waReminder(i,c)}
 function em(i,c){return emailReminder(i,c)}
 function W(){return <svg viewBox="0 0 32 32" width="18" height="18"><path fill="currentColor" d="M16.04 3C8.86 3 3 8.84 3 16.02c0 2.3.6 4.54 1.75 6.51L3 29l6.64-1.7a12.95 12.95 0 0 0 6.4 1.64h.01C23.22 28.94 29 23.1 29 15.92 29 8.8 23.18 3 16.04 3Zm7.56 18.45c-.32.9-1.86 1.7-2.6 1.8-.67.1-1.52.14-2.45-.15-.56-.18-1.28-.42-2.2-.82-3.87-1.68-6.4-5.6-6.6-5.86-.2-.26-1.58-2.1-1.58-4s1-2.84 1.35-3.23c.36-.4.78-.5 1.04-.5h.75c.24.01.57-.09.9.69.32.78 1.1 2.69 1.2 2.89.1.2.16.43.03.69-.13.26-.2.42-.4.64-.2.23-.42.5-.6.67-.2.2-.4.42-.17.82.23.4 1.02 1.68 2.2 2.72 1.51 1.35 2.78 1.77 3.18 1.97.4.2.63.17.86-.1.23-.26 1-1.16 1.26-1.56.26-.4.53-.33.9-.2.36.13 2.3 1.08 2.7 1.28.4.2.66.3.76.46.1.16.1.95-.22 1.85Z"/></svg>}
@@ -58,6 +59,27 @@ const alertInvoices=data.invoices.filter(i=>["Vencida","Por vencer"].includes(is
 const selectedInvoice=selectedInvoiceId?data.invoices.find(i=>i.id===selectedInvoiceId):alertInvoices[0], selectedClient=selectedInvoice?client(selectedInvoice.clienteId):null;
 const monthly=months.slice().reverse().map(m=>({mes:ml(m),ingresos:data.incomes.filter(i=>mk(i.fecha)===m).reduce((s,x)=>s+ +x.monto,0),egresos:data.expenses.filter(e=>mk(e.fecha)===m).reduce((s,x)=>s+ +x.monto,0),deudas:data.debts.filter(d=>mk(d.vencimiento)===m&&d.estado!=="Pagada").reduce((s,x)=>s+ +x.monto,0),vencidas:data.invoices.filter(i=>mk(i.vencimiento)===m&&ist(i).l==="Vencida").reduce((s,x)=>s+ +x.monto,0),saldo:data.incomes.filter(i=>mk(i.fecha)===m).reduce((s,x)=>s+ +x.monto,0)-data.expenses.filter(e=>mk(e.fecha)===m).reduce((s,x)=>s+ +x.monto,0)}));
 const pie=[{name:"Pagadas",value:fm.invoices.filter(i=>ist(i).l==="Pagada").length},{name:"Pendientes",value:fm.invoices.filter(i=>ist(i).l==="Pendiente").length},{name:"Por vencer",value:fm.invoices.filter(i=>ist(i).l==="Por vencer").length},{name:"Vencidas",value:fm.invoices.filter(i=>ist(i).l==="Vencida").length}];
+
+const aiData=useMemo(()=>{
+ const vencidas=data.invoices.filter(i=>ist(i).l==="Vencida");
+ const porVencer=data.invoices.filter(i=>ist(i).l==="Por vencer");
+ const riesgoCliente=data.clients.map(c=>{
+  const inv=data.invoices.filter(i=>+i.clienteId===+c.id);
+  const venc=inv.filter(i=>ist(i).l==="Vencida").length;
+  const pend=inv.filter(i=>ist(i).l!=="Pagada").length;
+  const montoVenc=inv.filter(i=>ist(i).l==="Vencida").reduce((s,x)=>s+ +x.monto,0);
+  const riesgo=venc>=3||montoVenc>=1000000?"ALTO":venc>=1||pend>=2?"MEDIO":"BAJO";
+  return {...c,riesgo,vencidas:venc,pendientes:pend,montoVencido:montoVenc};
+ }).sort((a,b)=>b.montoVencido-a.montoVencido);
+ const sugerencias=[
+  vencidas.length?`Enviar recordatorio urgente a ${vencidas.length} factura(s) vencida(s).`:"No hay facturas vencidas críticas.",
+  porVencer.length?`Programar aviso preventivo para ${porVencer.length} factura(s) por vencer.`:"No hay facturas próximas a vencer.",
+  riesgoCliente.filter(c=>c.riesgo==="ALTO").length?`Revisar clientes de riesgo ALTO antes de nuevas ventas.`:"Cartera sin clientes de alto riesgo."
+ ];
+ return {vencidas,porVencer,riesgoCliente,sugerencias};
+},[data]);
+function aiMessage(i){return `Estimado cliente, se recuerda su Factura ${i.factura} por la suma de ${money(i.monto)}. Saludos Cordiales GpsRuta`}
+
 function saveClient(){if(!clientForm.nombre||!clientForm.rut)return;if(editingClient){setData({...data,clients:data.clients.map(c=>c.id===editingClient?{...clientForm,id:editingClient}:c)});setEditingClient(null)}else setData({...data,clients:[{...clientForm,id:Date.now()},...data.clients]});setClientForm({nombre:"",rut:"",giro:"",telefono:"569",email:"",direccion:"",contacto:""})}
 function editClient(c){setEditingClient(c.id);setClientForm(c);setTab("clientes")}
 function saveInvoice(){if(!invoiceForm.clienteId||!invoiceForm.factura||!invoiceForm.monto)return;let p={...invoiceForm,id:editingInvoice||Date.now(),clienteId:+invoiceForm.clienteId,monto:+invoiceForm.monto};setData({...data,invoices:editingInvoice?data.invoices.map(i=>i.id===editingInvoice?p:i):[p,...data.invoices]});setEditingInvoice(null);setInvoiceForm({clienteId:"",factura:"",emision:today(),vencimiento:today(),monto:"",estado:"Pendiente",detalle:""})}
@@ -318,11 +340,11 @@ return <div className="app"><aside><Logo/><div className="admin"><User size={24}
 <section className="backupToolbar">
   <button className="backupBtn saveManual" onClick={manualSave}><HardDrive size={17}/>Guardar ahora</button>
   <button className="backupBtn" onClick={exportBackup}><Download size={17}/>Respaldar</button>
-  <label className="backupBtn importBtn"><Upload size={17}/>Importar respaldo<input type="file" accept=".json" onChange={e=>importBackup(e.target.files?.[0])}/></label><button className="backupBtn reportBtn" onClick={exportFinancialReport}>📊 Descargar informe Excel</button>
+  <label className="backupBtn importBtn"><Upload size={17}/>Importar respaldo<input type="file" accept=".json" onChange={e=>importBackup(e.target.files?.[0])}/></label><button className="backupBtn reportBtn" onClick={exportFinancialReport}>📊 Descargar informe Excel</button><span className="emailConfigured">📧 Correo cobranza: {SENDER_EMAIL}</span>
 </section>
 <section className="kpis"><K t="Ingresos del mes" v={money(stats.ingresos)} s={ml(selectedMonth)} icon={TrendingUp}/><K t="Egresos del mes" v={money(stats.egresos)} s={ml(selectedMonth)} icon={TrendingDown} tone="red"/><K t="Deudas por pagar" v={money(stats.deudas)} s="Según vencimiento" icon={CreditCard} tone="gold"/><K t="Facturas pendientes" v={money(stats.pend)} s="Por cobrar" icon={FileText} tone="blue"/><K t="Facturas vencidas" v={stats.venc.length} s="Cantidad mensual" icon={AlertTriangle} tone="red"/></section>
 {tab==="dashboard"&&<section className="gridDash dashboard3d"><div className="card chartPro wide holoCard mainHolo"><div className="holoBadge">HOLOGRAPHIC FINANCE PANEL</div><h2>Resumen financiero mensual 3D</h2><div className="chart compact hologramChart"><ResponsiveContainer><ComposedChart data={monthly} margin={{top:12,right:18,left:0,bottom:0}}><CartesianGrid stroke="rgba(255,255,255,.07)" vertical={false}/><XAxis dataKey="mes" stroke="#ccc" tick={{fontSize:12}}/><YAxis stroke="#ccc" tickFormatter={v=>`${Math.round(v/1000000)}M`} tick={{fontSize:12}}/><Tooltip formatter={v=>money(v)} contentStyle={{background:"#050505",border:"1px solid #FFD43B",borderRadius:"12px"}}/><Legend wrapperStyle={{fontSize:12}}/><Bar dataKey="ingresos" name="Ingresos" fill="#7CFC00" radius={[8,8,0,0]} barSize={20}/><Bar dataKey="egresos" name="Egresos" fill="#ff3131" radius={[8,8,0,0]} barSize={20}/><Bar dataKey="deudas" name="Deudas" fill="#FFD43B" radius={[8,8,0,0]} barSize={20}/><Line type="monotone" dataKey="saldo" name="Saldo neto" stroke="#00a3ff" strokeWidth={4} dot={{r:4,fill:"#00a3ff"}} activeDot={{r:7}}/></ComposedChart></ResponsiveContainer></div></div><div className="card chartPro estadoFacturasCard holoCard sideHolo"><div className="holoBadge small">STATUS SCAN</div><h2>Estado facturas del mes</h2><div className="chart donut hologramDonut"><ResponsiveContainer><PieChart><Pie data={pie} dataKey="value" nameKey="name" innerRadius={42} outerRadius={72} label={({name,value})=>`${name}: ${value}`} label={({value})=>value}>{pie.map((_,i)=><Cell key={i} fill={["#7CFC00","#FFD43B","#ff9500","#ff3131"][i]}/>)}</Pie><Tooltip contentStyle={{background:"#050505",border:"1px solid #00a3ff"}}/></PieChart></ResponsiveContainer></div><div className="estadoFacturasNumeros">{pie.map((p,i)=><div className={`estadoItem estado${i}`} key={p.name}><span></span><b>{p.name}</b><strong>{p.value}</strong></div>)}</div></div><div className="card wide holoCard summaryHolo"><div className="holoBadge small">MONTHLY CORE</div><h2>Resumen del mes seleccionado</h2><div className="summaryGrid">{[[money(stats.ingresos),"Ingresos"],[money(stats.egresos),"Egresos"],[money(stats.saldo),"Saldo neto"],[money(stats.deudas),"Deudas por pagar"],[money(stats.pend),"Facturas por cobrar"],[stats.venc.length,"Facturas vencidas"]].map(([a,b])=><div key={b}><b>{a}</b><span>{b}</span></div>)}</div></div></section>}
-{tab==="clientes"&&<section className="two"><div className="card"><h2>{editingClient?"Editar cliente":"Nuevo cliente"}</h2>
+<div className="card wide holoCard aiPanel"><div className="holoBadge small">IA COBRANZA</div><h2>Asistente IA de Cobranza</h2><div className="aiGrid"><div><b>{aiData.vencidas.length}</b><span>Facturas vencidas detectadas</span></div><div><b>{aiData.porVencer.length}</b><span>Facturas por vencer</span></div><div><b>{aiData.riesgoCliente.filter(c=>c.riesgo==="ALTO").length}</b><span>Clientes riesgo alto</span></div></div><div className="aiColumns"><div><h3>Sugerencias automáticas</h3>{aiData.sugerencias.map((s,i)=><p key={i}>🤖 {s}</p>)}</div><div><h3>Clientes por riesgo</h3>{aiData.riesgoCliente.slice(0,5).map(c=><p key={c.id}><b className={`risk ${c.riesgo.toLowerCase()}`}>{c.riesgo}</b> {c.nombre} · {money(c.montoVencido)}</p>)}</div></div>{aiData.vencidas[0]&&<div className="aiMessage"><b>Mensaje sugerido:</b><p>{aiMessage(aiData.vencidas[0])}</p></div>}</div>{tab==="clientes"&&<section className="two"><div className="card"><h2>{editingClient?"Editar cliente":"Nuevo cliente"}</h2>
 <div className="excelImportBox">
   <label className="excelBtn">📥 Cargar clientes desde Excel
     <input type="file" accept=".xlsx,.xls,.csv" onChange={e=>importClientsExcel(e.target.files?.[0])}/>

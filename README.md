@@ -30,3 +30,5 @@ Fondo actualizado a estilo premium negro/dorado/verde neón.
 Dashboard corregido: Estado facturas del mes muestra números visibles de inmediato.
 
 Dashboard Futurista 3D agregado: estilo holográfico, neón, animaciones y panel financiero avanzado.
+
+Correo cobranza configurado: gpsruta007@gmail.com. Reporte Estado de Facturas e IA de cobranza agregados.
