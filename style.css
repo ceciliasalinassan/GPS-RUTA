@@ -412,3 +412,213 @@ th{
 .recharts-bar-rectangle path{
   filter:drop-shadow(0 0 6px rgba(255,212,59,.10));
 }
+
+
+/* === DASHBOARD FUTURISTA 3D / HOLOGRÁFICO === */
+.dashboard3d{
+  perspective:1200px;
+  transform-style:preserve-3d;
+}
+
+.dashboard3d .holoCard{
+  position:relative;
+  overflow:hidden;
+  border:1px solid rgba(0,255,210,.36)!important;
+  background:
+    linear-gradient(145deg,rgba(0,18,24,.82),rgba(0,0,0,.70) 55%,rgba(11,18,4,.78))!important;
+  box-shadow:
+    0 26px 70px rgba(0,0,0,.62),
+    0 0 32px rgba(0,255,210,.12),
+    inset 0 0 26px rgba(124,252,0,.055)!important;
+  transform:rotateX(2deg) rotateY(-1deg);
+  transition:.35s ease;
+}
+
+.dashboard3d .holoCard:hover{
+  transform:rotateX(0deg) rotateY(0deg) translateY(-4px) scale(1.01);
+  border-color:rgba(124,252,0,.55)!important;
+  box-shadow:
+    0 34px 85px rgba(0,0,0,.68),
+    0 0 45px rgba(0,255,210,.18),
+    0 0 34px rgba(124,252,0,.12),
+    inset 0 0 32px rgba(255,212,59,.05)!important;
+}
+
+.dashboard3d .holoCard:before{
+  content:"";
+  position:absolute;
+  inset:-40%;
+  background:
+    conic-gradient(from 120deg,transparent,rgba(0,255,210,.12),transparent,rgba(124,252,0,.10),transparent);
+  animation:holoSpin 12s linear infinite;
+  opacity:.45;
+  pointer-events:none;
+}
+
+.dashboard3d .holoCard:after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(90deg,transparent 0%,rgba(255,255,255,.04) 50%,transparent 100%),
+    repeating-linear-gradient(0deg,rgba(255,255,255,.035) 0 1px,transparent 1px 7px);
+  mix-blend-mode:screen;
+  pointer-events:none;
+  opacity:.32;
+}
+
+@keyframes holoSpin{
+  to{transform:rotate(360deg)}
+}
+
+.holoBadge{
+  position:relative;
+  z-index:2;
+  display:inline-flex;
+  width:max-content;
+  align-items:center;
+  gap:7px;
+  padding:6px 10px;
+  border-radius:999px;
+  border:1px solid rgba(0,255,210,.35);
+  background:rgba(0,255,210,.08);
+  color:#00ffd2;
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:1.3px;
+  margin-bottom:10px;
+  text-shadow:0 0 10px rgba(0,255,210,.5);
+}
+
+.holoBadge.small{
+  font-size:10px;
+  color:#FFD43B;
+  border-color:rgba(255,212,59,.35);
+  background:rgba(255,212,59,.08);
+  text-shadow:0 0 10px rgba(255,212,59,.45);
+}
+
+.dashboard3d .card h2{
+  position:relative;
+  z-index:2;
+  color:#eaffff!important;
+  text-shadow:
+    0 0 12px rgba(0,255,210,.35),
+    0 0 22px rgba(124,252,0,.16);
+}
+
+.hologramChart,
+.hologramDonut{
+  position:relative;
+  z-index:2;
+  border-radius:20px;
+  padding:10px;
+  background:
+    radial-gradient(circle at 50% 45%,rgba(0,255,210,.14),transparent 42%),
+    linear-gradient(135deg,rgba(0,153,255,.06),rgba(124,252,0,.035));
+  border:1px solid rgba(0,255,210,.12);
+}
+
+.hologramChart:before,
+.hologramDonut:before{
+  content:"";
+  position:absolute;
+  inset:12px;
+  border-radius:16px;
+  border:1px solid rgba(0,255,210,.15);
+  box-shadow:
+    inset 0 0 28px rgba(0,255,210,.08),
+    0 0 28px rgba(0,255,210,.05);
+  pointer-events:none;
+}
+
+.hologramChart:after,
+.hologramDonut:after{
+  content:"";
+  position:absolute;
+  left:10%;
+  right:10%;
+  top:50%;
+  height:1px;
+  background:linear-gradient(90deg,transparent,#00ffd2,transparent);
+  opacity:.38;
+  animation:scanLine 3.6s ease-in-out infinite;
+  pointer-events:none;
+}
+
+@keyframes scanLine{
+  0%,100%{transform:translateY(-70px);opacity:.12}
+  50%{transform:translateY(70px);opacity:.55}
+}
+
+.dashboard3d .summaryGrid div{
+  position:relative;
+  overflow:hidden;
+  background:
+    linear-gradient(145deg,rgba(0,255,210,.08),rgba(255,212,59,.045))!important;
+  border:1px solid rgba(0,255,210,.20)!important;
+  box-shadow:inset 0 0 20px rgba(0,255,210,.04);
+}
+
+.dashboard3d .summaryGrid div:before{
+  content:"";
+  position:absolute;
+  width:70px;
+  height:70px;
+  right:-25px;
+  top:-25px;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(124,252,0,.22),transparent 68%);
+}
+
+.dashboard3d .summaryGrid b{
+  color:#00ffd2!important;
+  text-shadow:0 0 12px rgba(0,255,210,.45);
+}
+
+.dashboard3d .summaryGrid span{
+  color:#e7faff!important;
+}
+
+.dashboard3d .recharts-cartesian-grid line{
+  stroke:rgba(0,255,210,.08)!important;
+}
+
+.dashboard3d .recharts-text{
+  fill:#dff!important;
+}
+
+.dashboard3d .recharts-legend-item-text{
+  color:#eaffff!important;
+}
+
+.dashboard3d .recharts-line-curve{
+  filter:drop-shadow(0 0 10px rgba(0,255,210,.65));
+}
+
+.dashboard3d .recharts-bar-rectangle path{
+  filter:drop-shadow(0 0 10px rgba(124,252,0,.18));
+}
+
+.dashboard3d .estadoItem{
+  background:rgba(0,255,210,.045)!important;
+  border-color:rgba(0,255,210,.16)!important;
+}
+
+.dashboard3d .estadoItem strong{
+  text-shadow:0 0 10px currentColor;
+}
+
+.mainHolo{
+  min-height:320px;
+}
+
+.sideHolo{
+  min-height:320px;
+}
+
+@media(max-width:1180px){
+  .dashboard3d .holoCard{
+    transform:none;
+  }
+}

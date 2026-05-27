@@ -28,3 +28,5 @@ Clientes simplificado: listado muestra solo nombre/razón social y RUT.
 Fondo actualizado a estilo premium negro/dorado/verde neón.
 
 Dashboard corregido: Estado facturas del mes muestra números visibles de inmediato.
+
+Dashboard Futurista 3D agregado: estilo holográfico, neón, animaciones y panel financiero avanzado.
