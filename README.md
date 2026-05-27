@@ -31,8 +31,10 @@ Dashboard corregido: Estado facturas del mes muestra números visibles de inmedi
 
 Dashboard Futurista 3D agregado: estilo holográfico, neón, animaciones y panel financiero avanzado.
 
-Correo cobranza configurado: gpsruta007@gmail.com. Reporte Estado de Facturas e IA de cobranza agregados.
+Correo cobranza configurado: gpsruta007@outlook.com. Reporte Estado de Facturas e IA de cobranza agregados.
 
 Informe Excel corregido: hoja Deudas muestra solo pendientes/no pagadas.
 
 Se agregó envío de correo para deudas/facturas por pagar con email del proveedor.
+
+Correo de cobranza actualizado a gpsruta007@outlook.com.

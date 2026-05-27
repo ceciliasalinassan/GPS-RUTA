@@ -9,7 +9,7 @@ import"./style.css";
 const KEY="gpsruta_financiero_pro_v2";
 const SESSION="gpsruta_login";
 const PASS="1234";
-const SENDER_EMAIL="gpsruta007@gmail.com";
+const SENDER_EMAIL="gpsruta007@outlook.com";
 const incomeCats=["Venta de GPS","Instalación de GPS","Servicio mensual","Pago de factura","Abono cliente","Otro ingreso"];
 const expenseCats=["Pago instalador","Pago IVA","Pago contadora","Pago arriendo","Pago combustible","Pago internet","Pago plataforma","Compra de equipos","Otro egreso"];
 const seed={clients:[
