@@ -954,3 +954,38 @@ main:before{
     transition:none!important;
   }
 }
+
+
+/* HORA 24H + CLIENTE PREMIUM + NUEVA ESCALA RIESGO */
+.aiGrid{
+  grid-template-columns:repeat(4,1fr)!important;
+}
+.risk.premium{
+  background:linear-gradient(135deg,rgba(255,212,59,.25),rgba(124,252,0,.16));
+  color:#FFD43B;
+  border:1px solid rgba(255,212,59,.55);
+  box-shadow:0 0 14px rgba(255,212,59,.22);
+}
+.risk.alto{
+  background:rgba(255,49,49,.18);
+  color:#ff5757;
+  border:1px solid rgba(255,49,49,.35);
+}
+.risk.medio{
+  background:rgba(255,149,0,.18);
+  color:#ff9500;
+  border:1px solid rgba(255,149,0,.35);
+}
+.risk.bajo{
+  background:rgba(255,212,59,.16);
+  color:#FFD43B;
+  border:1px solid rgba(255,212,59,.35);
+}
+.risk.al-día{
+  background:rgba(124,252,0,.14);
+  color:#7CFC00;
+  border:1px solid rgba(124,252,0,.35);
+}
+@media(max-width:900px){
+  .aiGrid{grid-template-columns:1fr!important}
+}
