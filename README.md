@@ -44,3 +44,5 @@ Dashboard ajustado: números del resumen más pequeños y estilo futurista refor
 Dashboard mejorado con estilo futurista animado, holográfico y efectos neón.
 
 Hora en formato 24 hrs. Cliente PREMIUM automático al estar al día. Riesgo: alto 4 vencidas, medio 3 vencidas, bajo 2 vencidas.
+
+Dashboard 3D más futurista e IA Chat dentro del dashboard agregados.

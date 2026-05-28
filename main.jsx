@@ -1,7 +1,7 @@
 
 import React,{useEffect,useMemo,useState}from"react";
 import{createRoot}from"react-dom/client";
-import{AlertTriangle,Bell,CalendarDays,CheckCircle,Clock,CreditCard,Edit,Eye,FileText,Lock,LogOut,Mail,Paperclip,Plus,Search,ShieldCheck,Trash2,TrendingDown,TrendingUp,UploadCloud,User,Users,Wallet,Save,Building2,Download,Upload,HardDrive}from"lucide-react";
+import{AlertTriangle,Bell,CalendarDays,CheckCircle,Clock,CreditCard,Edit,Eye,FileText,Lock,LogOut,Mail,Paperclip,Plus,Search,ShieldCheck,Trash2,TrendingDown,TrendingUp,UploadCloud,User,Users,Wallet,Save,Building2,MessageCircle,Bot,Sparkles,Download,Upload,HardDrive}from"lucide-react";
 import{ComposedChart,Bar,Line,XAxis,YAxis,Tooltip,ResponsiveContainer,CartesianGrid,PieChart,Pie,Cell,Legend}from"recharts";
 import * as XLSX from "xlsx";
 import"./style.css";
@@ -50,7 +50,7 @@ function Login({onLogin}){const[p,setP]=useState(""),[e,setE]=useState("");retur
 function K({t,v,s,icon:Icon,tone="green"}){return <div className="card kpi"><div className={`kpiIcon ${tone}`}><Icon size={32}/></div><div><small>{t}</small><h3>{v}</h3><p>{s}</p></div></div>}
 function Fields({obj,set,fields}){return <div className="formGrid">{fields.map(f=><input key={f} value={obj[f]||""} onChange={e=>set({...obj,[f]:e.target.value})} placeholder={f.toUpperCase()} type={["fecha","emision","vencimiento"].includes(f)?"date":f==="monto"?"number":"text"}/>)}</div>}
 function InvTable({items,client,edit,del,data={},attachFile=()=>{},canSendInvoice=()=>true}){return <div className="tableWrap"><table><thead><tr><th>Factura</th><th>Cliente</th><th>Vence</th><th>Mes/Año</th><th>Monto</th><th>Estado</th><th>Acciones</th></tr></thead><tbody>{items.map(i=>{let c=client(i.clienteId),s=ist(i),Icon=s.I;return <tr key={i.id}><td><b>{i.factura}</b></td><td>{c?.nombre}</td><td>{i.vencimiento}</td><td>{ml(mk(i.vencimiento))}</td><td>{money(i.monto)}</td><td><span className={`status ${s.c}`}><Icon size={14}/>{s.l}</span></td><td><div className="actions"><label className="icon attachMini" title="Adjuntar factura"><Paperclip size={17}/><input type="file" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx,.xls,.xlsx" onChange={e=>attachFile(i.id,e.target.files?.[0])}/></label><a className="icon whatsapp" title="Recordatorio WhatsApp" href={waReminder(i,c)} target="_blank"><W/></a><a className="icon mail" title="Recordatorio correo" href={emailReminder(i,c)}><Mail size={17}/></a><a className={`icon invoiceSend ${!data.attachments?.[i.id]?"disabled":""}`} title="Enviar factura WhatsApp" href={data.attachments?.[i.id]?waInvoice(i,c):"#"} onClick={e=>{if(!canSendInvoice(i.id))e.preventDefault()}} target="_blank">FAC</a><button className="icon edit" onClick={()=>edit(i)}><Edit size={17}/></button><button className="icon trash" onClick={()=>del(i.id)}><Trash2 size={17}/></button>{data.attachments?.[i.id]&&<span className="attachedOk">Adjunta</span>}</div></td></tr>})}</tbody></table></div>}
-function App(){const[logged,setLogged]=useState(()=>sessionStorage.getItem(SESSION)==="1"),[data,setData]=useState(load),[tab,setTab]=useState("dashboard"),[clock,setClock]=useState(new Date()),[search,setSearch]=useState(""),[alertSearch,setAlertSearch]=useState(""),[saved,setSaved]=useState("Sin cambios"),[selectedInvoiceId,setSelectedInvoiceId]=useState(null),[selectedMonth,setSelectedMonth]=useState(mk(today()));
+function App(){const[logged,setLogged]=useState(()=>sessionStorage.getItem(SESSION)==="1"),[data,setData]=useState(load),[tab,setTab]=useState("dashboard"),[clock,setClock]=useState(new Date()),[search,setSearch]=useState(""),[alertSearch,setAlertSearch]=useState(""),[saved,setSaved]=useState("Sin cambios"),[selectedInvoiceId,setSelectedInvoiceId]=useState(null),[selectedMonth,setSelectedMonth]=useState(mk(today())),[chatOpen,setChatOpen]=useState(true),[chatInput,setChatInput]=useState(""),[chatMessages,setChatMessages]=useState([{role:"ia",text:"Hola, soy la IA de Cobranza GPSRUTA. Puedes preguntarme por facturas vencidas, clientes de riesgo, ingresos, egresos, deudas o resumen del mes."}]);
 const[clientForm,setClientForm]=useState({nombre:"",rut:"",giro:"",telefono:"569",email:"",direccion:"",contacto:""}),[invoiceForm,setInvoiceForm]=useState({clienteId:"",factura:"",emision:today(),vencimiento:today(),monto:"",estado:"Pendiente",detalle:""}),[incomeForm,setIncomeForm]=useState({fecha:today(),categoria:"Pago de factura",descripcion:"",monto:"",facturaId:""}),[expenseForm,setExpenseForm]=useState({fecha:today(),categoria:"Pago instalador",descripcion:"",monto:"",debtId:"",numeroFacturaPago:""}),[debtForm,setDebtForm]=useState({fecha:today(),proveedor:"",emailProveedor:"",categoria:"Compra de equipos",descripcion:"",monto:"",vencimiento:today(),estado:"Pendiente"}),[editingClient,setEditingClient]=useState(null),[editingInvoice,setEditingInvoice]=useState(null);
 useEffect(()=>{localStorage.setItem(KEY,JSON.stringify(data));setSaved(new Date().toLocaleTimeString("es-CL"))},[data]);
 useEffect(()=>{let t=setInterval(()=>setClock(new Date()),1000);return()=>clearInterval(t)},[]);
@@ -344,6 +344,48 @@ function importInvoicesExcel(file){
  };
  reader.readAsArrayBuffer(file);
 }
+
+function askDashboardAI(){
+  const q=chatInput.trim();
+  if(!q)return;
+  const lower=q.toLowerCase();
+  let answer="";
+  const vencidas=data.invoices.filter(i=>ist(i).l==="Vencida");
+  const porVencer=data.invoices.filter(i=>ist(i).l==="Por vencer");
+  const deudasPendientes=data.debts.filter(d=>d.estado!=="Pagada");
+  const topMorosos=aiData.riesgoCliente.filter(c=>c.vencidas>0).slice(0,5);
+
+  if(lower.includes("moroso")||lower.includes("riesgo")||lower.includes("debe más")||lower.includes("deuda cliente")){
+    answer=topMorosos.length
+      ? "Clientes con mayor riesgo:\\n"+topMorosos.map(c=>`• ${c.nombre}: ${c.vencidas} vencida(s), ${money(c.montoVencido)}, riesgo ${c.riesgo}`).join("\\n")
+      : "No detecto clientes morosos en este momento.";
+  }else if(lower.includes("vencida")||lower.includes("vencidas")){
+    answer=vencidas.length
+      ? "Facturas vencidas detectadas:\\n"+vencidas.slice(0,8).map(i=>`• ${i.factura} · ${client(i.clienteId)?.nombre||""} · ${money(i.monto)} · venció ${i.vencimiento}`).join("\\n")
+      : "No hay facturas vencidas.";
+  }else if(lower.includes("por vencer")||lower.includes("vencer")){
+    answer=porVencer.length
+      ? "Facturas por vencer:\\n"+porVencer.slice(0,8).map(i=>`• ${i.factura} · ${client(i.clienteId)?.nombre||""} · ${money(i.monto)} · vence ${i.vencimiento}`).join("\\n")
+      : "No hay facturas por vencer.";
+  }else if(lower.includes("ingreso")||lower.includes("ingresos")){
+    answer=`Ingresos del mes ${ml(selectedMonth)}: ${money(stats.ingresos)}. Registros: ${fm.incomes.length}.`;
+  }else if(lower.includes("egreso")||lower.includes("egresos")){
+    answer=`Egresos del mes ${ml(selectedMonth)}: ${money(stats.egresos)}. Registros: ${fm.expenses.length}.`;
+  }else if(lower.includes("deuda")||lower.includes("deudas")){
+    answer=deudasPendientes.length
+      ? "Deudas/facturas por pagar pendientes:\\n"+deudasPendientes.slice(0,8).map(d=>`• ${d.proveedor}: ${money(d.monto)} · vence ${d.vencimiento}`).join("\\n")
+      : "No hay deudas pendientes por pagar.";
+  }else if(lower.includes("premium")){
+    const premium=aiData.riesgoCliente.filter(c=>c.riesgo==="PREMIUM");
+    answer=premium.length
+      ? "Clientes PREMIUM al día:\\n"+premium.slice(0,8).map(c=>`• ${c.nombre} · RUT ${c.rut}`).join("\\n")
+      : "Aún no hay clientes PREMIUM detectados.";
+  }else{
+    answer=`Resumen ${ml(selectedMonth)}:\\n• Ingresos: ${money(stats.ingresos)}\\n• Egresos: ${money(stats.egresos)}\\n• Saldo: ${money(stats.saldo)}\\n• Deudas por pagar: ${money(stats.deudas)}\\n• Facturas pendientes: ${money(stats.pend)}\\n• Facturas vencidas: ${stats.venc.length}`;
+  }
+  setChatMessages([...chatMessages,{role:"user",text:q},{role:"ia",text:answer}]);
+  setChatInput("");
+}
 if(!logged)return <Login onLogin={()=>setLogged(true)}/>;
 return <div className="app"><aside><Logo/><div className="admin"><User size={24}/><div><b>Administrador</b><p>admin@gpsruta.cl</p></div></div><nav>{[["dashboard","Dashboard",Eye],["clientes","Clientes",Users],["facturas","Facturas por cobrar",FileText],["deudas","Deudas / Facturas por pagar",CreditCard],["ingresos","Ingresos",TrendingUp],["egresos","Egresos",TrendingDown],["alertas","Cobros / Recordatorios",Bell]].map(([v,l,I])=><button key={v} onClick={()=>setTab(v)} className={tab===v?"active":""}><I size={20}/>{l}</button>)}</nav><div className="autosave"><CheckCircle size={20}/><div><b>Guardado automático activo</b><p>Último guardado: {saved}</p></div></div><button className="logout" onClick={()=>{sessionStorage.removeItem(SESSION);setLogged(false)}}><LogOut size={19}/>Cerrar sesión</button></aside><main><header><div className="search"><Search size={17}/><input value={search} onChange={e=>setSearch(e.target.value)} placeholder="Buscar cliente, factura o giro..."/></div><div className="chips"><select value={selectedMonth} onChange={e=>setSelectedMonth(e.target.value)} className="monthSelect">{months.map(m=><option key={m} value={m}>{ml(m)}</option>)}</select><span><CalendarDays size={17}/>{clock.toLocaleDateString("es-CL")}</span><span><Clock size={17}/>{clock.toLocaleTimeString("es-CL",{hour12:false,hour:"2-digit",minute:"2-digit",second:"2-digit"})}</span><span className="green"><Save size={17}/>Guardado automático</span></div></header>
 <section className="backupToolbar">
@@ -353,7 +395,21 @@ return <div className="app"><aside><Logo/><div className="admin"><User size={24}
 </section>
 <section className="kpis"><K t="Ingresos del mes" v={money(stats.ingresos)} s={ml(selectedMonth)} icon={TrendingUp}/><K t="Egresos del mes" v={money(stats.egresos)} s={ml(selectedMonth)} icon={TrendingDown} tone="red"/><K t="Deudas por pagar" v={money(stats.deudas)} s="Según vencimiento" icon={CreditCard} tone="gold"/><K t="Facturas pendientes" v={money(stats.pend)} s="Por cobrar" icon={FileText} tone="blue"/><K t="Facturas vencidas" v={stats.venc.length} s="Cantidad mensual" icon={AlertTriangle} tone="red"/></section>
 {tab==="dashboard"&&<section className="gridDash dashboard3d"><div className="card chartPro wide holoCard mainHolo"><div className="holoBadge">HOLOGRAPHIC FINANCE PANEL</div><h2>Resumen financiero mensual 3D</h2><div className="chart compact hologramChart"><ResponsiveContainer><ComposedChart data={monthly} margin={{top:12,right:18,left:0,bottom:0}}><CartesianGrid stroke="rgba(255,255,255,.07)" vertical={false}/><XAxis dataKey="mes" stroke="#ccc" tick={{fontSize:12}}/><YAxis stroke="#ccc" tickFormatter={v=>`${Math.round(v/1000000)}M`} tick={{fontSize:12}}/><Tooltip formatter={v=>money(v)} contentStyle={{background:"#050505",border:"1px solid #FFD43B",borderRadius:"12px"}}/><Legend wrapperStyle={{fontSize:12}}/><Bar dataKey="ingresos" name="Ingresos" fill="#7CFC00" radius={[8,8,0,0]} barSize={20}/><Bar dataKey="egresos" name="Egresos" fill="#ff3131" radius={[8,8,0,0]} barSize={20}/><Bar dataKey="deudas" name="Deudas" fill="#FFD43B" radius={[8,8,0,0]} barSize={20}/><Line type="monotone" dataKey="saldo" name="Saldo neto" stroke="#00a3ff" strokeWidth={4} dot={{r:4,fill:"#00a3ff"}} activeDot={{r:7}}/></ComposedChart></ResponsiveContainer></div></div><div className="card chartPro estadoFacturasCard holoCard sideHolo"><div className="holoBadge small">STATUS SCAN</div><h2>Estado facturas del mes</h2><div className="chart donut hologramDonut"><ResponsiveContainer><PieChart><Pie data={pie} dataKey="value" nameKey="name" innerRadius={42} outerRadius={72} label={({name,value})=>`${name}: ${value}`} label={({value})=>value}>{pie.map((_,i)=><Cell key={i} fill={["#7CFC00","#FFD43B","#ff9500","#ff3131"][i]}/>)}</Pie><Tooltip contentStyle={{background:"#050505",border:"1px solid #00a3ff"}}/></PieChart></ResponsiveContainer></div><div className="estadoFacturasNumeros">{pie.map((p,i)=><div className={`estadoItem estado${i}`} key={p.name}><span></span><b>{p.name}</b><strong>{p.value}</strong></div>)}</div></div><div className="card wide holoCard summaryHolo"><div className="holoBadge small">MONTHLY CORE</div><h2>Resumen del mes seleccionado</h2><div className="summaryGrid">{[[money(stats.ingresos),"Ingresos"],[money(stats.egresos),"Egresos"],[money(stats.saldo),"Saldo neto"],[money(stats.deudas),"Deudas por pagar"],[money(stats.pend),"Facturas por cobrar"],[stats.venc.length,"Facturas vencidas"]].map(([a,b])=><div key={b}><b>{a}</b><span>{b}</span></div>)}</div></div></section>}
-<div className="card wide holoCard aiPanel"><div className="holoBadge small">IA COBRANZA</div><h2>Asistente IA de Cobranza</h2><div className="aiGrid"><div><b>{aiData.vencidas.length}</b><span>Facturas vencidas detectadas</span></div><div><b>{aiData.porVencer.length}</b><span>Facturas por vencer</span></div><div><b>{aiData.riesgoCliente.filter(c=>c.riesgo==="ALTO").length}</b><span>Clientes riesgo alto</span></div><div><b>{aiData.riesgoCliente.filter(c=>c.riesgo==="PREMIUM").length}</b><span>Clientes PREMIUM al día</span></div></div><div className="aiColumns"><div><h3>Sugerencias automáticas</h3>{aiData.sugerencias.map((s,i)=><p key={i}>🤖 {s}</p>)}</div><div><h3>Clientes por riesgo</h3>{aiData.riesgoCliente.slice(0,5).map(c=><p key={c.id}><b className={`risk ${String(c.riesgo).toLowerCase().replace(" ","-")}`}>{c.riesgo}</b> {c.nombre} · {money(c.montoVencido)}</p>)}</div></div>{aiData.vencidas[0]&&<div className="aiMessage"><b>Mensaje sugerido:</b><p>{aiMessage(aiData.vencidas[0])}</p></div>}</div>{tab==="clientes"&&<section className="two"><div className="card"><h2>{editingClient?"Editar cliente":"Nuevo cliente"}</h2>
+<div className="card wide holoCard aiPanel"><div className="holoBadge small">IA COBRANZA</div><h2>Asistente IA de Cobranza</h2><div className="aiGrid"><div><b>{aiData.vencidas.length}</b><span>Facturas vencidas detectadas</span></div><div><b>{aiData.porVencer.length}</b><span>Facturas por vencer</span></div><div><b>{aiData.riesgoCliente.filter(c=>c.riesgo==="ALTO").length}</b><span>Clientes riesgo alto</span></div><div><b>{aiData.riesgoCliente.filter(c=>c.riesgo==="PREMIUM").length}</b><span>Clientes PREMIUM al día</span></div></div><div className="aiColumns"><div><h3>Sugerencias automáticas</h3>{aiData.sugerencias.map((s,i)=><p key={i}>🤖 {s}</p>)}</div><div><h3>Clientes por riesgo</h3>{aiData.riesgoCliente.slice(0,5).map(c=><p key={c.id}><b className={`risk ${String(c.riesgo).toLowerCase().replace(" ","-")}`}>{c.riesgo}</b> {c.nombre} · {money(c.montoVencido)}</p>)}</div></div>{aiData.vencidas[0]&&<div className="aiMessage"><b>Mensaje sugerido:</b><p>{aiMessage(aiData.vencidas[0])}</p></div>}</div>
+<div className={`aiChatWidget ${chatOpen?"open":"closed"}`}>
+  <button className="aiChatToggle" onClick={()=>setChatOpen(!chatOpen)}><Bot size={20}/>{chatOpen?"Cerrar IA":"Abrir IA"}</button>
+  {chatOpen&&<div className="aiChatBox">
+    <div className="aiChatHeader"><Sparkles size={18}/><div><b>IA GPSRUTA</b><small>Asistente financiero inteligente</small></div></div>
+    <div className="aiChatMessages">
+      {chatMessages.map((m,i)=><div key={i} className={`aiMsg ${m.role}`}><pre>{m.text}</pre></div>)}
+    </div>
+    <div className="aiChatInput">
+      <input value={chatInput} onChange={e=>setChatInput(e.target.value)} onKeyDown={e=>{if(e.key==="Enter")askDashboardAI()}} placeholder="Pregunta: ¿quién debe más?"/>
+      <button onClick={askDashboardAI}><MessageCircle size={17}/>Enviar</button>
+    </div>
+  </div>}
+</div>
+{tab==="clientes"&&<section className="two"><div className="card"><h2>{editingClient?"Editar cliente":"Nuevo cliente"}</h2>
 <div className="excelImportBox">
   <label className="excelBtn">📥 Cargar clientes desde Excel
     <input type="file" accept=".xlsx,.xls,.csv" onChange={e=>importClientsExcel(e.target.files?.[0])}/>

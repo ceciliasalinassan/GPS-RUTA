@@ -989,3 +989,188 @@ main:before{
 @media(max-width:900px){
   .aiGrid{grid-template-columns:1fr!important}
 }
+
+
+/* === EXTRA DASHBOARD 3D FUTURISTA AVANZADO === */
+.dashboard3d{
+  transform-style:preserve-3d;
+  perspective:1600px;
+}
+
+.dashboard3d .holoCard{
+  border-image:linear-gradient(135deg,#00ffd2,#7CFC00,#FFD43B,#00a3ff) 1!important;
+}
+
+.dashboard3d .holoCard:before{
+  opacity:.62!important;
+}
+
+.dashboard3d .mainHolo{
+  background:
+    radial-gradient(circle at 40% 48%,rgba(0,255,210,.16),transparent 38%),
+    linear-gradient(145deg,rgba(0,18,28,.88),rgba(0,0,0,.72) 56%,rgba(17,12,0,.78))!important;
+}
+
+.dashboard3d .mainHolo:after{
+  background:
+    repeating-linear-gradient(0deg,rgba(0,255,210,.055) 0 1px,transparent 1px 9px),
+    repeating-linear-gradient(90deg,rgba(255,212,59,.035) 0 1px,transparent 1px 32px),
+    linear-gradient(115deg,transparent,rgba(0,255,210,.09),transparent)!important;
+}
+
+.dashboard3d .chart.compact{
+  box-shadow:
+    inset 0 0 34px rgba(0,255,210,.08),
+    0 0 28px rgba(0,255,210,.12);
+}
+
+.dashboard3d .card{
+  transition:transform .35s ease, box-shadow .35s ease, border-color .35s ease;
+}
+
+.dashboard3d .card:hover{
+  transform:translateY(-8px) rotateX(1deg) rotateY(-1deg) scale(1.015)!important;
+}
+
+/* === CHAT IA DENTRO DEL DASHBOARD === */
+.aiChatWidget{
+  position:fixed;
+  right:24px;
+  bottom:24px;
+  z-index:50;
+  width:380px;
+  max-width:calc(100vw - 32px);
+  font-family:Arial,sans-serif;
+}
+
+.aiChatToggle{
+  float:right;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  border:1px solid rgba(0,255,210,.45);
+  background:linear-gradient(135deg,rgba(0,255,210,.18),rgba(124,252,0,.12));
+  color:#eaffff;
+  padding:11px 14px;
+  border-radius:999px;
+  font-weight:900;
+  cursor:pointer;
+  box-shadow:0 0 24px rgba(0,255,210,.22);
+}
+
+.aiChatBox{
+  clear:both;
+  margin-top:52px;
+  border:1px solid rgba(0,255,210,.42);
+  border-radius:22px;
+  background:
+    radial-gradient(circle at 20% 10%,rgba(0,255,210,.16),transparent 35%),
+    linear-gradient(145deg,rgba(0,13,20,.92),rgba(0,0,0,.86));
+  box-shadow:
+    0 30px 70px rgba(0,0,0,.65),
+    0 0 34px rgba(0,255,210,.18),
+    inset 0 0 26px rgba(124,252,0,.05);
+  overflow:hidden;
+  backdrop-filter:blur(18px);
+}
+
+.aiChatHeader{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:14px;
+  border-bottom:1px solid rgba(0,255,210,.18);
+  background:rgba(0,255,210,.06);
+  color:#00ffd2;
+}
+
+.aiChatHeader b{
+  display:block;
+  font-size:15px;
+  text-shadow:0 0 12px rgba(0,255,210,.45);
+}
+
+.aiChatHeader small{
+  display:block;
+  color:#dff;
+  font-size:11px;
+}
+
+.aiChatMessages{
+  max-height:310px;
+  overflow:auto;
+  padding:14px;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.aiMsg{
+  border-radius:14px;
+  padding:10px 12px;
+  border:1px solid rgba(255,255,255,.09);
+}
+
+.aiMsg pre{
+  margin:0;
+  white-space:pre-wrap;
+  font-family:Arial,sans-serif;
+  line-height:1.35;
+  font-size:13px;
+}
+
+.aiMsg.user{
+  align-self:flex-end;
+  max-width:86%;
+  background:rgba(255,212,59,.12);
+  color:#fff7d0;
+  border-color:rgba(255,212,59,.28);
+}
+
+.aiMsg.ia{
+  align-self:flex-start;
+  max-width:92%;
+  background:rgba(0,255,210,.08);
+  color:#eaffff;
+  border-color:rgba(0,255,210,.24);
+}
+
+.aiChatInput{
+  display:flex;
+  gap:8px;
+  padding:12px;
+  border-top:1px solid rgba(0,255,210,.16);
+  background:rgba(0,0,0,.35);
+}
+
+.aiChatInput input{
+  flex:1;
+  min-width:0;
+  height:42px;
+  border-radius:13px;
+  border:1px solid rgba(0,255,210,.24);
+  background:rgba(0,0,0,.58);
+  color:white;
+  padding:0 12px;
+}
+
+.aiChatInput button{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  border:0;
+  border-radius:13px;
+  background:linear-gradient(135deg,#00ffd2,#7CFC00);
+  color:#001;
+  font-weight:900;
+  padding:0 12px;
+  cursor:pointer;
+}
+
+@media(max-width:700px){
+  .aiChatWidget{
+    right:12px;
+    bottom:12px;
+    width:calc(100vw - 24px);
+  }
+}
